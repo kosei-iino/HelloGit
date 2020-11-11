@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FizzBuzz問題</title>
+</head>
+<body>
+<h1>FizzBuzz問題</h1>
+<section id="section1">
+<form action="" name="form1">
+<table>
+    <tr>
+        <td>FizzNum:</td>
+        <td><input type="text" id="fizz" placeholder="整数値を入力してください"></td>
+    </tr>
+    <tr>
+        <td>BuzzNum:</td>
+        <td><input type="text" id="buzz" placeholder="整数値を入力してください"></td>
+    </tr>
+</table>
+<button type="button" id="btn1">実行</button>
+</form>
+<p>【出力】</p>
+</section>
+<section id="section2">
+</section>
+<script>
+//実行
+const ele_btn1 = document.getElementById('btn1');
+ele_btn1.addEventListener('click', (e) => {
+
+    //タグの用意
+    let ele_sec2 = document.getElementById('section2');
+    let ele_nums = document.createElement('dev'); 
+
+    //初期化
+    if(ele_sec2.hasChildNodes()) {
+        while(ele_sec2.firstChild){
+            ele_sec2.removeChild(ele_sec2.firstChild);
+        }
+    }
+
+    //テキストフィールドのデータ入力
+    const input_fizz = document.getElementById("fizz").value;
+    const input_buzz = document.getElementById("buzz").value;
+
+    //空チェック
+    if(!input_fizz || !input_buzz){
+        let ele_err = document.createElement('p');
+        ele_err.textContent = "半角数字を入力してください";
+        ele_nums.appendChild(ele_err);
+    }
+    //文字列チェック
+    else if(isNaN(input_fizz) || isNaN(input_buzz)){
+        let ele_err = document.createElement('p');
+        ele_err.textContent = "半角数字で入力してください";
+        ele_nums.appendChild(ele_err);
+    }
+    //少数チェック
+    else if(input_fizz % 1 != 0 || input_buzz % 1 != 0){
+        let ele_err = document.createElement('p');
+        ele_err.textContent = "整数で入力してください";
+        ele_nums.appendChild(ele_err);
+    }
+    //エラーがない場合
+    else{
+        let ary_data = [];
+        let i = 1;
+        let j = 1;
+        //Fizzを配列に入力 + 0を入力されるとエラーになるため回避
+        while(input_fizz * i < 100 && input_fizz != 0){
+            ary_data.push(input_fizz * i);
+            i++;
+        }
+        //Buzzを配列に入力 + 0を入力されるとエラーになるため回避
+        while(input_buzz * j < 100 && input_buzz != 0){
+            //既に追加した数値を排除
+            if(ary_data.indexOf(input_buzz * j) == -1){
+                ary_data.push(input_buzz * j);
+            }
+            j++;
+        }
+
+        //配列を昇順にソート
+        let ary_sort_data = ary_data.sort((a,b) => a - b);
+
+        //データ出力
+        ary_sort_data.forEach(sort_data => {
+            //FizzBuzzを子要素に入力
+            if(sort_data % input_fizz == 0 && sort_data % input_buzz == 0){
+                let output = document.createElement('p');
+                output.style.margin = 0;
+                output.textContent = "FizzBuzz" + " " + (sort_data);
+                ele_nums.appendChild(output);
+            }
+            else{
+                //Fizzを子要素に入力
+                if(sort_data % input_fizz == 0){
+                    let output = document.createElement('p');
+                    output.style.margin = 0;
+                    output.textContent = "Fizz" + " " + (sort_data);
+                    ele_nums.appendChild(output);
+                }
+                //Buzzを子要素に入力
+                if(sort_data % input_buzz == 0){
+                    let output = document.createElement('p');
+                    output.style.margin = 0;
+                    output.textContent = "Buzz" + " " + (sort_data);
+                    ele_nums.appendChild(output);
+                }
+            }
+        });
+    }
+    //まとめて出力
+    ele_sec2.appendChild(ele_nums);
+});
+</script>
+</body>
+</html>
