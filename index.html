@@ -43,7 +43,6 @@ eleBtn.addEventListener('click', (e) => {
     }
 
     //テキストフィールドのデータ入力
-
     const inputFizz = document.getElementById('fizz').value;
     const inputBuzz = document.getElementById('buzz').value;
 
@@ -52,18 +51,24 @@ eleBtn.addEventListener('click', (e) => {
         const eleErr = document.createElement('p');
         eleErr.textContent = '半角数字を入力してください';
         eleNums.appendChild(eleErr);
+        eleOut.appendChild(eleNums);
+        return;
     }
     //文字列チェック
     else if(isNaN(inputFizz) || isNaN(inputBuzz)){
         const eleErr = document.createElement('p');
         eleErr.textContent = '半角数字で入力してください';
         eleNums.appendChild(eleErr);
+        eleOut.appendChild(eleNums);
+        return;
     }
     //少数チェック
     else if(inputFizz % 1 !== 0 || inputBuzz % 1 !== 0){
         const eleErr = document.createElement('p');
         eleErr.textContent = '整数で入力してください';
         eleNums.appendChild(eleErr);
+        eleOut.appendChild(eleNums);
+        return;
     }
     //エラーがない場合
     else{
