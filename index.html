@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FizzBuzz問題</title>
 </head>
 <body>
+
 <h1>FizzBuzz問題</h1>
-<section id="section1">
-<form action="" name="form1">
+<section id="input">
+<form action="" name="form">
 <table>
     <tr>
         <td>FizzNum:</td>
@@ -19,101 +20,103 @@
         <td><input type="text" id="buzz" placeholder="整数値を入力してください"></td>
     </tr>
 </table>
-<button type="button" id="btn1">実行</button>
+<button type="button" id="btn">実行</button>
 </form>
 <p>【出力】</p>
 </section>
-<section id="section2">
+<section id="output">
 </section>
 <script>
 //実行
-const ele_btn1 = document.getElementById('btn1');
-ele_btn1.addEventListener('click', (e) => {
+const eleBtn = document.getElementById('btn');
+eleBtn.addEventListener('click', (e) => {
 
     //タグの用意
-    let ele_sec2 = document.getElementById('section2');
-    let ele_nums = document.createElement('dev'); 
+    const eleOut = document.getElementById('output');
+    const eleNums = document.createElement('dev'); 
 
     //初期化
-    if(ele_sec2.hasChildNodes()) {
-        while(ele_sec2.firstChild){
-            ele_sec2.removeChild(ele_sec2.firstChild);
+    if(eleOut.hasChildNodes()) {
+        while(eleOut.firstChild){
+            eleOut.removeChild(eleOut.firstChild);
         }
     }
 
     //テキストフィールドのデータ入力
-    const input_fizz = document.getElementById("fizz").value;
-    const input_buzz = document.getElementById("buzz").value;
+    const inputFizz = document.getElementById('fizz').value;
+    const inputBuzz = document.getElementById('buzz').value;
 
     //空チェック
-    if(!input_fizz || !input_buzz){
-        let ele_err = document.createElement('p');
-        ele_err.textContent = "半角数字を入力してください";
-        ele_nums.appendChild(ele_err);
+    if(!inputFizz || !inputBuzz){
+        const eleErr = document.createElement('p');
+        eleErr.textContent = '半角数字を入力してください';
+        eleNums.appendChild(eleErr);
+        eleOut.appendChild(eleNums);
+        return;
     }
     //文字列チェック
-    else if(isNaN(input_fizz) || isNaN(input_buzz)){
-        let ele_err = document.createElement('p');
-        ele_err.textContent = "半角数字で入力してください";
-        ele_nums.appendChild(ele_err);
+    else if(isNaN(inputFizz) || isNaN(inputBuzz)){
+        const eleErr = document.createElement('p');
+        eleErr.textContent = '半角数字で入力してください';
+        eleNums.appendChild(eleErr);
+        eleOut.appendChild(eleNums);
+        return;
     }
     //少数チェック
-    else if(input_fizz % 1 != 0 || input_buzz % 1 != 0){
-        let ele_err = document.createElement('p');
-        ele_err.textContent = "整数で入力してください";
-        ele_nums.appendChild(ele_err);
+    else if(inputFizz % 1 !== 0 || inputBuzz % 1 !== 0){
+        const eleErr = document.createElement('p');
+        eleErr.textContent = '整数で入力してください';
+        eleNums.appendChild(eleErr);
+        eleOut.appendChild(eleNums);
+        return;
     }
     //エラーがない場合
     else{
-        let ary_data = [];
-        let i = 1;
-        let j = 1;
-        //Fizzを配列に入力 + 0を入力されるとエラーになるため回避
-        while(input_fizz * i < 100 && input_fizz != 0){
-            ary_data.push(input_fizz * i);
-            i++;
+        let outAryData = [];
+        let cntFizz = 1;
+        let cntBuzz = 1;
+        //Fizzの倍数が最大99までループ + 0だった場合はループなし
+        while(inputFizz * cntFizz < 100 && inputFizz !== 0){
+            outAryData.push(['Fizz' ,inputFizz * cntFizz]);
+            cntFizz++;
         }
-        //Buzzを配列に入力 + 0を入力されるとエラーになるため回避
-        while(input_buzz * j < 100 && input_buzz != 0){
-            //既に追加した数値を排除
-            if(ary_data.indexOf(input_buzz * j) == -1){
-                ary_data.push(input_buzz * j);
-            }
-            j++;
-        }
+        //Buzzの倍数が最大99までループ + 0だった場合はループなし
+        while(inputBuzz * cntBuzz < 100 && inputBuzz !== 0){
 
+            //FizzBuzz確認用変数
+            let cntFizzBuzz = 0;
+            let bolFizzBuzz = false;
+
+            //FizzBuzz確認
+            outAryData.forEach(outData => {
+               if(outData.indexOf(inputBuzz * cntBuzz) !== -1){
+                    //FizzBuzzだった場合は置換
+                    outAryData[cntFizzBuzz].splice('Fizz',1,'FizzBuzz');
+                    bolFizzBuzz = true;
+                    return 0;
+               }
+               cntFizzBuzz++;                
+            });
+
+            //FizzBuzzでなければBuzzをインプット
+            if(!bolFizzBuzz){
+                outAryData.push(['Buzz' ,inputBuzz * cntBuzz]);
+            }
+            cntBuzz++;
+        }
         //配列を昇順にソート
-        let ary_sort_data = ary_data.sort((a,b) => a - b);
+        const outArySortData = outAryData.sort((a,b) => a[1] - b[1]);
 
         //データ出力
-        ary_sort_data.forEach(sort_data => {
-            //FizzBuzzを子要素に入力
-            if(sort_data % input_fizz == 0 && sort_data % input_buzz == 0){
-                let output = document.createElement('p');
+        outArySortData.forEach(outSortData => {
+                const output = document.createElement('p');
                 output.style.margin = 0;
-                output.textContent = "FizzBuzz" + " " + (sort_data);
-                ele_nums.appendChild(output);
-            }
-            else{
-                //Fizzを子要素に入力
-                if(sort_data % input_fizz == 0){
-                    let output = document.createElement('p');
-                    output.style.margin = 0;
-                    output.textContent = "Fizz" + " " + (sort_data);
-                    ele_nums.appendChild(output);
-                }
-                //Buzzを子要素に入力
-                if(sort_data % input_buzz == 0){
-                    let output = document.createElement('p');
-                    output.style.margin = 0;
-                    output.textContent = "Buzz" + " " + (sort_data);
-                    ele_nums.appendChild(output);
-                }
-            }
+                output.textContent = outSortData[0] + ' ' + outSortData[1];
+                eleNums.appendChild(output);
         });
     }
     //まとめて出力
-    ele_sec2.appendChild(ele_nums);
+    eleOut.appendChild(eleNums);
 });
 </script>
 </body>
